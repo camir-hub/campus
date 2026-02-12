@@ -2,7 +2,8 @@ python -m venv .venv (Instalación entorno virtual)
 .venv\Scripts\activate (Activar .venv)
 
 pip install Flask (Instalación de FLASK Framework)
-
+pip install psycopg2
+pip install dotenv
 
 Flask --app app run (Ejecutar aplicación)
 
