@@ -1,6 +1,6 @@
 # campus
-<a href="https://github.com/Thibor82/campus">Campus_Konectia</a> © 2026 by 
-<a href="https://spaceham.es/">Rubén Caballero</a> is licensed under 
+<a href="https://github.com/camir-hub/campus">Campus</a> © 2026 by 
+<a href="https://example.com">Luis Castañal Miranda</a> is licensed under 
 <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
