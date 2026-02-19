@@ -37,8 +37,6 @@ def hello_world():
         password = request.form["password"]
         print(password)
         
-
-        
         try:
             conn = conectarCampus()
             cursor = conn.cursor()
