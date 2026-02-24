@@ -19,7 +19,6 @@ def login_requerido(f):
             return redirect(url_for("hello_world"))
         return f(*args, **kwargs)
     return decorado
-
 def conectarCampus():
     conexion = psycopg2.connect(
         host=os.getenv("DB_HOST"),
@@ -35,7 +34,7 @@ def hello_world():
     if request.method == "POST":
         usuario = request.form["user"]
         password = request.form["password"]
-        print(password)
+        
         
 
         
@@ -57,17 +56,17 @@ def hello_world():
                     session["email"] = email
                     return redirect(url_for("perfil_usuario"))
                 else:
-                    return redirect(url_for("registro"))
+                    return redirect(url_for("f_registro"))
             else:
-                return redirect(url_for("registro"))
+                return redirect(url_for("f_registro"))
         except Exception as e:
             print(f"Error: {e}")
-            return redirect(url_for("registro"))
+            return redirect(url_for("f_registro"))
     
     return render_template("login.html")
 
 @app.route("/registro", methods=["GET", "POST"])
-def registro():
+def f_registro():
     if request.method == "POST":
         usuario = request.form["user"]
         password = request.form["password"]
@@ -82,7 +81,7 @@ def registro():
             conn = conectarCampus()
             cursor = conn.cursor()
             # Comprobar si el email ya está registrado
-            cursor.execute("SELECT 1 FROM usuarios WHERE usuario_email = %s", (email,))
+            cursor.execute("SELECT 1 FROM usuarios WHERE usuario_email = %s", (email))
             existe = cursor.fetchone()
             if existe:
                 cursor.close()
@@ -113,6 +112,13 @@ def perfil_usuario():
     usuario = session.get("usuario")
     email = session.get("email")
     return render_template("user.html", usuario=usuario, email=email)
+@app.route("/perfil_admin", methods=["GET"])
+@login_requerido
+def perfil_admin():
+    """Página de perfil del administrador protegida"""
+    usuario = session.get("usuario")
+    email = session.get("email")
+    return render_template("perfil_admin.html", usuario=usuario, email=email)
 
 @app.route("/logout", methods=["GET"])
 def logout():
@@ -121,7 +127,7 @@ def logout():
     return redirect(url_for("hello_world"))
 
 @app.route("/app-admin", methods=["GET", "POST"])
-def perfil_admin():
+def login_admin():
     if request.method == "POST":
         usuario = request.form["user"]
         password = request.form["password"]
@@ -129,8 +135,8 @@ def perfil_admin():
         try:
             conn = conectarCampus()
             cursor = conn.cursor()
-            # Obtener el password y email para el usuario admin (sin hash)
-            cursor.execute("SELECT password, usuario_email FROM usuarios WHERE usuario = %s", (usuario,))
+            # Obtener el password y email para el usuario admin
+            cursor.execute("SELECT password, usuario_email FROM usuarios WHERE usuario = %s", (usuario))
             resultado = cursor.fetchone()
             cursor.close()
             conn.close()
@@ -140,15 +146,47 @@ def perfil_admin():
                 if password == stored_password:
                     session["usuario"] = usuario
                     session["email"] = email
-                    return redirect(url_for("perfil_usuario"))
+                    return redirect(url_for("perfil_admin"))
                 else:
                     print("Contraseña incorrecta")
-                    return render_template("login.html", error="Usuario o contraseña incorrectos")
+                    return render_template("admin.html", error="Usuario o contraseña incorrectos")
             else:
                 print("Usuario no encontrado en la base de datos")
-                return render_template("login.html", error="Usuario o contraseña incorrectos")
+                return render_template("admin.html", error="Usuario o contraseña incorrectos")
         except Exception as e:
             print(f"Error: {e}")
-            return render_template("login.html", error=f"Error en el servidor: {e}")
+            return render_template("admin.html", error=f"Error en el servidor: {e}")
     
     return render_template("admin.html")
+
+
+@app.route("/mod_usuarios", methods=["GET", "POST"])
+def mod_usuarios():
+    if request.method == "POST":       
+        usuario = request.form["user"]
+        email = request.form["email"]
+        creado_en = request.form["date"]
+
+        try:
+            conn = conectarCampus()
+            cursor = conn.cursor()
+            # Obtener el password y email para el usuario admin
+            cursor.execute("SELECT usuario, usuario_email, creado_en FROM usuarios WHERE usuario = %s OR usuario_email = %s OR creado_en = %s", (usuario, email, creado_en))
+            resultados = cursor.fetchall()
+            cursor.close()
+            conn.close()
+
+            usuarios = []
+            for r in resultados:
+                usuarios.append({
+                    "usuario": r[0],
+                    "email": r[1],
+                    "creado_en": r[2]
+                })
+
+            return render_template("mod_usuarios.html", usuarios=usuarios)
+        except Exception as e:
+            print(f"Error: {e}")
+            return render_template("mod_usuarios.html", error=f"Error en el servidor: {e}")
+        
+    return render_template("mod_usuarios.html")
