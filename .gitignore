@@ -122,3 +122,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#Archivos de flask
+flask_version
+
+# Esquema de BD
+InfoDataBase/Schema.sql
