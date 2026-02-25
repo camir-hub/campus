@@ -35,9 +35,6 @@ def hello_world():
         usuario = request.form["user"]
         password = request.form["password"]
         
-        
-
-        
         try:
             conn = conectarCampus()
             cursor = conn.cursor()
@@ -76,21 +73,24 @@ def f_registro():
         rol_defecto = "alumno"
         
         password_hash = generate_password_hash(password)
-
+        print("Acabo de generar ", password_hash)
         try:
             conn = conectarCampus()
             cursor = conn.cursor()
             # Comprobar si el email ya está registrado
-            cursor.execute("SELECT 1 FROM usuarios WHERE usuario_email = %s", (email))
+            cursor.execute("SELECT 1 FROM usuarios WHERE usuario_email = %s", (email,))
             existe = cursor.fetchone()
+            print("imprimo var existe", existe)
             if existe:
                 cursor.close()
                 conn.close()
+                print(existe)
                 return render_template("registro.html", error="El email ya está registrado")
 
             # Insertar nuevo usuario
+            print(usuario, password_hash, email, creado_en, actualizado_en, rol_defecto)
             cursor.execute("INSERT INTO usuarios (usuario, password, usuario_email, creado_en, actualizado_en, rol) VALUES (%s, %s, %s, %s, %s, %s)", (usuario, password_hash, email, creado_en, actualizado_en, rol_defecto))
-        
+            print("acaba la consulta insert")
             conn.commit()
             cursor.close()
             conn.close()
