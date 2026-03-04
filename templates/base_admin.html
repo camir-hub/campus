@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Konectia</title>
+    <title>Campus Konectia - Administración</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo"> Campus Konectia</div>
+            <div class="logo">🔧 Campus Konectia Admin</div>
             <ul class="nav-links">
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/registro">Registro</a></li>
+                <li><a href="/app-admin">Inicio</a></li>
                 {% if session.get('usuario') %}
-                    <li><a href="/perfil">Mi Perfil</a></li>
+                    <li><a href="/perfil-admin">Mi Panel</a></li>
                     <li><a href="/logout">Salir</a></li>
                 {% endif %}
             </ul>

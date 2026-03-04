@@ -1,0 +1,134 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width: 1000px; margin: 2rem auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1>👥 Gestionar Usuarios</h1>
+        <p style="color: var(--text-gray); margin-top: 0.5rem;">Administra todos los usuarios del sistema</p>
+    </div>
+
+    {% if error %}
+        <div class="error">
+            <strong>⚠️ Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+    
+    <div class="card">
+        <h3 style="margin-top: 0;">🔍 Buscar Usuario</h3>
+        <form method="POST" action="/mod_usuarios" style="display: grid; grid-template-columns: 1fr 1fr 1fr 100px; gap: 1rem; align-items: flex-end;">
+            <div class="form-group" style="margin: 0;">
+                <label for="user">Usuario</label>
+                <input 
+                    type="text" 
+                    id="user"
+                    name="user" 
+                    placeholder="Buscar por usuario"
+                    style="margin: 0;">
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email"
+                    name="email" 
+                    placeholder="Buscar por email"
+                    style="margin: 0;">
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+                <label for="date">Fecha de Alta</label>
+                <input 
+                    type="date" 
+                    id="date"
+                    name="date" 
+                    value="0001-01-01"
+                    style="margin: 0;">
+            </div>
+
+            <button type="submit" class="btn" style="height: fit-content;">
+                🔍 Buscar
+            </button>
+        </form>
+    </div>
+
+    <h3 style="margin-top: 2rem;">📋 Lista de Usuarios</h3>
+    
+    <div id="usuario_lista">
+        {% if usuarios %}
+            <div class="users-grid">
+                {% for u in usuarios %}
+                    <div class="user-card" id="{{ u.usuario }}">
+                        <h4 style="margin-top: 0;">👤 {{ u.usuario }}</h4>
+                        <div class="user-info">
+                            <p style="margin: 0.3rem 0;">
+                                <strong>📧 Email:</strong><br>
+                                {{ u.email }}
+                            </p>
+                            <p style="margin: 0.3rem 0;">
+                                <strong>📅 Registrado:</strong><br>
+                                {{ u.creado_en }}
+                            </p>
+                        </div>
+                        <button 
+                            type="button" 
+                            onclick="location.href='{{ request.path }}/{{ u.usuario }}'"
+                            class="btn" style="width: 100%; margin-top: 1rem;">
+                            ✏️ Modificar
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="info" style="text-align: center; padding: 2rem;">
+                <p>No se encontraron usuarios en el sistema.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if usuario_a_modificar %}
+        <div class="card" style="margin-top: 3rem; background: rgba(0, 212, 255, 0.05); border-color: rgba(0, 212, 255, 0.5);">
+            <h3 style="margin-top: 0; color: var(--accent);">✏️ Modificar Usuario: {{ usuario_a_modificar.usuario }}</h3>
+            
+            <form method="POST" action="{{ request.path }}" style="max-width: 500px;">
+                <div class="form-group">
+                    <label for="mod_user">Nombre de Usuario</label>
+                    <input 
+                        type="text" 
+                        id="mod_user"
+                        name="user" 
+                        value="{{ usuario_a_modificar.usuario }}" 
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mod_email">Email</label>
+                    <input 
+                        type="email" 
+                        id="mod_email"
+                        name="email" 
+                        value="{{ usuario_a_modificar.email }}" 
+                        required>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-success" style="flex: 1;">
+                        ✅ Guardar Cambios
+                    </button>
+                    <a href="/mod_usuarios" class="btn btn-secondary" style="flex: 1; text-align: center;">
+                        ❌ Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
+    <div style="margin-top: 2rem;">
+        <a href="{{ url_for('admin_bp.perfil_admin') }}" class="btn btn-secondary">
+            ← Volver al Panel
+        </a>
+    </div>
+</div>
+
+{% endblock %}

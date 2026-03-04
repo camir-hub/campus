@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 
 {% block content %}
 
 <div class="container" style="max-width: 500px; margin: 4rem auto;">
     <div style="text-align: center; margin-bottom: 2rem;">
-        <h1> Bienvenido al Campus Konectia</h1>
-        <p style="color: var(--text-gray); margin-top: 0.5rem;">Accede a tu cuenta de Campus Konectia</p>
+        <h1>🔐 Panel Administrativo</h1>
+        <p style="color: var(--text-gray); margin-top: 0.5rem;">Acceso restringido - Solo administradores</p>
     </div>
 
     {% if error %}
@@ -14,14 +14,14 @@
         </div>
     {% endif %}
     
-    <form method="POST" action="/">
+    <form method="POST" action="/app-admin">
         <div class="form-group">
-            <label for="user">👤 Usuario</label>
+            <label for="user">👤 Usuario Administrador</label>
             <input 
                 type="text" 
                 id="user"
                 name="user" 
-                placeholder="Ingresa tu usuario"
+                placeholder="Usuario admin"
                 required
                 autocomplete="username">
         </div>
@@ -32,7 +32,7 @@
                 type="password" 
                 id="password"
                 name="password" 
-                placeholder="Ingresa tu contraseña"
+                placeholder="Contraseña"
                 required
                 autocomplete="current-password">
         </div>
@@ -43,28 +43,28 @@
                 type="email" 
                 id="email"
                 name="email" 
-                placeholder="tu@email.com"
+                placeholder="admin@email.com"
                 required
                 autocomplete="email">
         </div>
 
         <button type="submit" style="margin-top: 1.5rem; width: 100%;">
-            Acceder a Campus
+            Acceder al Panel
         </button>
     </form>
 
     <hr style="border-color: rgba(0, 102, 255, 0.2); margin: 2rem 0;">
     
     <div style="text-align: center;">
-        <p style="color: var(--text-gray);">¿No tienes cuenta?</p>
-        <a href="/registro" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem;">
-            Crear nueva cuenta
+        <p style="color: var(--text-gray);">¿No es un administrador?</p>
+        <a href="/" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem;">
+            Volver al Login
         </a>
     </div>
 
-    <div style="text-align: center; margin-top: 2rem;">
-        <p style="color: var(--text-gray); font-size: 0.85rem;">
-            Panel Admin: <a href="/app-admin" style="color: var(--secondary); text-decoration: none;">Acceso Administrador</a>
+    <div style="background: rgba(255, 183, 0, 0.1); border-left: 3px solid var(--warning); padding: 1rem; border-radius: 5px; margin-top: 2rem;">
+        <p style="color: var(--warning); margin: 0; font-size: 0.9rem;">
+            <strong>⚠️ Acceso Restringido:</strong> Este panel es solo para administradores del sistema. El acceso no autorizado está prohibido.
         </p>
     </div>
 </div>

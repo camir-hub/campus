@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width: 1200px;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1>📅 Mi Calendario</h1>
+        <p style="color: var(--text-gray); margin-top: 0.5rem;">Eventos y fechas importantes de {{ usuario }}</p>
+    </div>
+
+    <div class="calendar-container">
+        <!-- CALENDARIO PRINCIPAL -->
+        <div class="calendar-main">
+            <div class="card">
+                <div class="calendar-controls">
+                    <a href="{{ url_for('alumno_bp.calendario', year=prev_year, month=prev_month) }}" class="btn btn-secondary">
+                        ← Anterior
+                    </a>
+                    <span class="calendar-month-year">
+                        {% set months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'] %}
+                        {{ months[month-1] }} {{ year }}
+                    </span>
+                    <a href="{{ url_for('alumno_bp.calendario', year=next_year, month=next_month) }}" class="btn btn-secondary">
+                        Siguiente →
+                    </a>
+                </div>
+
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>Dom</th>
+                            <th>Lun</th>
+                            <th>Mar</th>
+                            <th>Mié</th>
+                            <th>Jue</th>
+                            <th>Vie</th>
+                            <th>Sáb</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for week in weeks %}
+                        <tr>
+                            {% for day in week %}
+                                {% if day == 0 %}
+                                    <td class="empty"></td>
+                                {% else %}
+                                    {% set classes = [] %}
+                                    {% if events_by_day.get(day) %}
+                                        {% set classes = classes + ['has-event'] %}
+                                    {% endif %}
+                                    <td class="day {{ classes|join(' ') }}" data-date="{{ year }}-{{ '%02d'|format(month) }}-{{ '%02d'|format(day) }}">
+                                        <strong>{{ day }}</strong>
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Formulario para agregar eventos (sin modal) -->
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="margin-top: 0;">➕ Agregar Nuevo Evento</h3>
+                <form method="POST" action="{{ url_for('alumno_bp.crear_evento') }}">
+                    <div class="form-group">
+                        <label for="fecha">📅 Fecha</label>
+                        <input type="date" id="fecha" name="fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="titulo">📝 Título del Evento</label>
+                        <input type="text" id="titulo" name="titulo" placeholder="Ej: Examen, Presentación, Entrega..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">📋 Descripción</label>
+                        <textarea id="descripcion" name="descripcion" placeholder="Detalles adicionales..." rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success" style="width: 100%;">
+                        ✅ Guardar Evento
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SIDEBAR DE EVENTOS -->
+        <div class="calendar-sidebar">
+            <div class="events-sidebar">
+                <h3 style="margin-top: 0;">📌 Próximos Eventos</h3>
+                
+                {% if events_by_day %}
+                    <div style="max-height: 600px; overflow-y: auto;">
+                        {% for day in events_by_day|sort %}
+                            {% set day_events = events_by_day[day] %}
+                            {% if day_events %}
+                                <h4 style="color: var(--secondary); font-size: 0.95rem; margin: 1.5rem 0 0.8rem 0;">
+                                    📅 {{ day }} de {{ months[month-1] }}
+                                </h4>
+                                {% for event in day_events %}
+                                    <div class="event-item">
+                                        <div class="event-title">
+                                            🎯 {{ event.titulo }}
+                                        </div>
+                                        {% if event.descripcion %}
+                                            <div class="event-desc">
+                                                {{ event.descripcion }}
+                                            </div>
+                                        {% endif %}
+                                        <div class="event-time" style="margin-top: 0.5rem; font-size: 0.8rem;">
+                                            ⏰ Día {{ day }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="color: var(--text-gray); padding: 1.5rem 0; text-align: center;">
+                        <p style="margin: 0; font-size: 0.9rem;">
+                            ℹ️ No hay eventos registrados para este mes
+                        </p>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem;">
+                            ¡Agrega tu primer evento!
+                        </p>
+                    </div>
+                {% endif %}
+
+                <hr style="border-color: rgba(0, 102, 255, 0.2); margin: 1.5rem 0;">
+
+                <div style="padding: 1rem; background: rgba(0, 102, 255, 0.1); border-radius: 5px; border-left: 3px solid var(--secondary);">
+                    <p style="color: var(--text-gray); margin: 0; font-size: 0.85rem;">
+                        💡 <strong>Tip:</strong> Haz click en cualquier día del calendario para ver más detalles.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA DETALLES DEL DÍA -->
+    <div id="detalle-dia" class="modal">
+        <div class="modal-content">
+            <span id="cerrar-detalle" class="close">&times;</span>
+            <h3 id="detalle-fecha" style="margin-top: 0;"></h3>
+            
+            <div style="background: rgba(0, 102, 255, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 3px solid var(--secondary);">
+                <ul id="detalle-eventos" style="margin: 0;">
+                    <!-- Se llenará dinámicamente -->
+                </ul>
+            </div>
+
+            <hr style="border-color: rgba(0, 102, 255, 0.2);">
+            
+            <h4 style="color: var(--secondary);">➕ Agregar Evento a este Día</h4>
+            <form id="form-evento" method="post" action="{{ url_for('alumno_bp.crear_evento') }}">
+                <input type="hidden" name="fecha" id="input-fecha" value="" />
+                
+                <div class="form-group">
+                    <label for="modal-titulo">Título</label>
+                    <input 
+                        type="text" 
+                        id="modal-titulo"
+                        name="titulo" 
+                        placeholder="Nombre del evento"
+                        required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="modal-descripcion">Descripción</label>
+                    <textarea 
+                        id="modal-descripcion"
+                        name="descripcion" 
+                        placeholder="Detalles adicionales..."
+                        rows="2"></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-success" style="flex: 1;">
+                        ✅ Guardar Evento
+                    </button>
+                    <button type="button" id="cerrar-detalle-btn" class="btn btn-secondary" style="flex: 1;">
+                        ❌ Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div style="margin-top: 2rem; text-align: center;">
+        <a href="{{ url_for('alumno_bp.perfil_usuario') }}" class="btn btn-secondary">
+            ← Volver a Mi Campus
+        </a>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Abrir modal al hacer click en un día con evento
+    document.querySelectorAll('.calendar-table td.day').forEach(cell => {
+        cell.addEventListener('click', () => {
+            const fecha = cell.dataset.date;
+            fetch(`{{ url_for('alumno_bp.dia_detalle') }}?date=${fecha}`)
+                .then(r => r.json())
+                .then(data => showDetalle(data));
+        });
+    });
+
+    // Cerrar modal
+    document.getElementById('cerrar-detalle').addEventListener('click', () => {
+        document.getElementById('detalle-dia').style.display = 'none';
+    });
+
+    document.getElementById('cerrar-detalle-btn').addEventListener('click', () => {
+        document.getElementById('detalle-dia').style.display = 'none';
+    });
+
+    // Cerrar al hacer click fuera del modal
+    window.addEventListener('click', (event) => {
+        const modal = document.getElementById('detalle-dia');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
+function showDetalle(data) {
+    const modal = document.getElementById('detalle-dia');
+    const fechaEl = document.getElementById('detalle-fecha');
+    const lista = document.getElementById('detalle-eventos');
+    const inputFecha = document.getElementById('input-fecha');
+    
+    fechaEl.textContent = '📅 ' + data.date;
+    inputFecha.value = data.date;
+    lista.innerHTML = '';
+    
+    if (data.eventos && data.eventos.length) {
+        data.eventos.forEach(e => {
+            const li = document.createElement('li');
+            li.innerHTML = '<strong>' + e.titulo + '</strong>' + (e.descripcion ? '<br>' + e.descripcion : '');
+            li.style.background = 'transparent';
+            li.style.border = 'none';
+            li.style.padding = '0.5rem 0';
+            li.style.margin = '0.5rem 0';
+            lista.appendChild(li);
+        });
+    } else {
+        const li = document.createElement('li');
+        li.textContent = 'No hay eventos para este día';
+        li.style.background = 'transparent';
+        li.style.border = 'none';
+        li.style.padding = '0.5rem 0';
+        li.style.margin = '0';
+        li.style.color = 'var(--text-gray)';
+        lista.appendChild(li);
+    }
+    
+    modal.style.display = 'block';
+}
+</script>
+
+{% endblock %}

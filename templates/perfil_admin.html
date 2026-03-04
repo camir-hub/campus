@@ -1,0 +1,94 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width: 900px; margin: 2rem auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1>🔧 Panel de Control</h1>
+        <p style="color: var(--text-gray); margin-top: 0.5rem;">Administrador: <strong style="color: var(--secondary);">{{ usuario }}</strong></p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <div class="card">
+            <h4 style="margin-top: 0;">📊 Estadísticas</h4>
+            <p style="color: var(--text-gray); font-size: 0.9rem; margin: 0.5rem 0;">Total de usuarios registrados</p>
+            <h2 style="color: var(--secondary); margin: 0.5rem 0;">--</h2>
+        </div>
+        <div class="card">
+            <h4 style="margin-top: 0;">👥 Usuarios Activos</h4>
+            <p style="color: var(--text-gray); font-size: 0.9rem; margin: 0.5rem 0;">Conectados en este momento</p>
+            <h2 style="color: var(--accent); margin: 0.5rem 0;">--</h2>
+        </div>
+        <div class="card">
+            <h4 style="margin-top: 0;">📚 Asignaturas</h4>
+            <p style="color: var(--text-gray); font-size: 0.9rem; margin: 0.5rem 0;">Total en el sistema</p>
+            <h2 style="color: var(--success); margin: 0.5rem 0;">--</h2>
+        </div>
+    </div>
+
+    <h2 style="margin-top: 2.5rem;">⚙️ Gestión del Sistema</h2>
+    
+    <div class="admin-panel">
+        <div class="admin-card">
+            <div class="admin-icon">👥</div>
+            <h4>Gestionar Usuarios</h4>
+            <p style="color: var(--text-gray);">Agregar, editar o eliminar usuarios del sistema</p>
+            <button type="button" onclick="location.href='{{ url_for('admin_bp.mod_usuarios') }}'" class="btn" style="width: 100%;">
+                Abrir Gestor
+            </button>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-icon">📚</div>
+            <h4>Gestionar Asignaturas</h4>
+            <p style="color: var(--text-gray);">Crear, editar o eliminar asignaturas</p>
+            <button class="btn" style="width: 100%;">
+                Abrir Gestor
+            </button>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-icon">⏰</div>
+            <h4>Gestionar Horarios</h4>
+            <p style="color: var(--text-gray);">Configurar horarios de clases y eventos</p>
+            <button class="btn" style="width: 100%;">
+                Abrir Gestor
+            </button>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-icon">📋</div>
+            <h4>Reportes</h4>
+            <p style="color: var(--text-gray);">Ver reportes y estadísticas del sistema</p>
+            <button class="btn" style="width: 100%;">
+                Ver Reportes
+            </button>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-icon">⚙️</div>
+            <h4>Configuración</h4>
+            <p style="color: var(--text-gray);">Ajustes generales del sistema</p>
+            <button class="btn" style="width: 100%;">
+                Configurar
+            </button>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-icon">🔐</div>
+            <h4>Seguridad</h4>
+            <p style="color: var(--text-gray);">Gestionar permisos y autenticación</p>
+            <button class="btn" style="width: 100%;">
+                Seguridad
+            </button>
+        </div>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <a href="{{ url_for('admin_bp.logout') }}" class="btn btn-danger" style="width: 100%; text-align: center; padding: 1rem;">
+            Cerrar Sesión
+        </a>
+    </div>
+</div>
+
+{% endblock%}

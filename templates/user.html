@@ -2,9 +2,63 @@
 
 {% block content %}
 
-    <p>Usuario {{ usuario }} ha iniciado sesión correctamente.<br>
-    <p>Tu correo es: {{ email }}</p><br>
-    
-    <a href="{{ url_for('logout') }}" class="btn btn-danger">Cerrar sesión</a>
+<div class="container" style="max-width: 800px; margin: 2rem auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1>👨‍🎓 Mi Campus</h1>
+        <p style="color: var(--text-gray); margin-top: 0.5rem;">Bienvenido de vuelta, {{ usuario }}</p>
+    </div>
+
+    <div class="card">
+        <h3>📊 Información de Perfil</h3>
+        <div style="display: grid; gap: 1rem;">
+            <div style="background: rgba(0, 102, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--secondary);">
+                <p style="color: var(--text-gray); margin: 0; font-size: 0.9rem;">Nombre de Usuario</p>
+                <p style="color: var(--secondary); margin: 0.3rem 0; font-size: 1.2rem; font-weight: bold;">{{ usuario }}</p>
+            </div>
+            <div style="background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--accent);">
+                <p style="color: var(--text-gray); margin: 0; font-size: 0.9rem;">Correo Electrónico</p>
+                <p style="color: var(--accent); margin: 0.3rem 0; font-size: 1.1rem;">{{ email }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-panel">
+        <div class="admin-card">
+            <div class="admin-icon">📅</div>
+            <h4>Mi Calendario</h4>
+            <p style="color: var(--text-gray);">Ver mis eventos y fechas importantes</p>
+            <a href="{{ url_for('alumno_bp.calendario') }}" class="btn" style="width: 100%;">
+                Abrir Calendario
+            </a>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-icon">📚</div>
+            <h4>Mis Asignaturas</h4>
+            <p style="color: var(--text-gray);">Gestiona tus cursos y materias</p>
+            <button class="btn" style="width: 100%;">
+                Ver Asignaturas
+            </button>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-icon">📋</div>
+            <h4>Horario de Clases</h4>
+            <p style="color: var(--text-gray);">Tu horario semanal actualizado</p>
+            <button class="btn" style="width: 100%;">
+                Ver Horario
+            </button>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center;">
+        <a href="{{ url_for('alumno_bp.perfil_usuario') }}" class="btn btn-secondary">
+            Actualizar Perfil
+        </a>
+        <a href="{{ url_for('alumno_bp.logout') }}" class="btn btn-danger">
+            Cerrar Sesión
+        </a>
+    </div>
+</div>
 
 {% endblock%}
