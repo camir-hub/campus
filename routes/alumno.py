@@ -117,7 +117,7 @@ def calendario():
             conn = conectarCampus()
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT fecha, titulo FROM eventos WHERE id_usuarios = %s AND date_part('year', fecha) = %s AND date_part('month', fecha) = %s",
+                "SELECT fecha, titulo FROM eventos WHERE id_usuario = %s AND date_part('year', fecha) = %s AND date_part('month', fecha) = %s",
                 (user_id, year, month),
             )
             for fecha, titulo in cursor.fetchall():
@@ -166,7 +166,7 @@ def dia_detalle():
             conn = conectarCampus()
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT titulo, descripcion FROM eventos WHERE id_usuarios = %s AND fecha = %s",
+                "SELECT titulo, descripcion FROM eventos WHERE id_usuario = %s AND fecha = %s",
                 (user_id, fecha),
             )
             for titulo, descripcion in cursor.fetchall():
@@ -201,7 +201,7 @@ def crear_evento():
             conn = conectarCampus()
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO eventos (id_usuarios, fecha, titulo, descripcion) VALUES (%s, %s, %s, %s)",
+                "INSERT INTO eventos (id_usuario, fecha, titulo, descripcion) VALUES (%s, %s, %s, %s)",
                 (user_id, fecha, titulo, descripcion),
             )
             conn.commit()
