@@ -71,5 +71,23 @@ yarn-error.log*
 # Archivos de Flask
 flask_session/
 
+<<<<<<< HEAD
 #Esquema BD
+=======
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+#Archivos de flask
+flask_version
+
+# Esquema de BD
+>>>>>>> origin/main
 InfoDataBase/Schema.sql

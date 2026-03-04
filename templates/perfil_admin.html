@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<<<<<<< HEAD
 <div class="container" style="max-width: 900px; margin: 2rem auto;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <h1>🔧 Panel de Control</h1>
@@ -90,5 +91,21 @@
         </a>
     </div>
 </div>
+=======
+    <p>Admin {{ usuario }} ha iniciado sesión correctamente.<br>
+    
+    <ul>
+        <li><button type="button" onclick="location.href='{{ url_for('mod_usuarios') }}'">Modificar Usuarios</button></li>
+        <li><button>Modificar Asignaturas</button></li>
+        <li><button>Modificar Horarios</button></li>
+        <li><button></button></li>
+        <li><button></button></li>
+        <li><button></button></li>
+
+    </ul>
+    
+    
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Cerrar sesión</a>
+>>>>>>> origin/main
 
 {% endblock%}

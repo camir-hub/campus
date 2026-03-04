@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎓 Campus Konectia
 
 Una aplicación web educativa desarrollada con Flask que permite la gestión de usuarios, autenticación y acceso diferenciado para estudiantes, profesores y administradores. La plataforma incluye funcionalidades de calendario, gestión de perfiles y un sistema robusto de autenticación.
@@ -574,3 +575,12 @@ flask --app app run --port 5001
 **Última actualización**: 3 de marzo de 2026
 
 Para preguntas o reportar problemas, abre un **Issue** en GitHub o contacta al equipo de desarrollo.
+=======
+# campus
+<a href="https://github.com/camir-hub/campus">Campus</a> © 2026 by 
+<a href="https://example.com">Luis Castañal Miranda</a> is licensed under 
+<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+<img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+<img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+>>>>>>> origin/main
