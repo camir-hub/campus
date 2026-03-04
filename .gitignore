@@ -71,6 +71,7 @@ yarn-error.log*
 # Archivos de Flask
 flask_session/
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 #Esquema BD
 =======
@@ -90,4 +91,7 @@ flask_version
 
 # Esquema de BD
 >>>>>>> origin/main
+=======
+#Esquema BD
+>>>>>>> Stashed changes
 InfoDataBase/Schema.sql

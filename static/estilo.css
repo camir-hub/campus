@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
 /* ===== VARIABLES GLOBALES ===== */
 :root {
   --primary: #0066ff;
@@ -641,6 +644,7 @@ ul li:hover {
     grid-template-columns: 1fr;
   }
 }
+<<<<<<< Updated upstream
 =======
 p {
     color: rgb(192, 23, 23);
@@ -720,3 +724,5 @@ button:disabled {
   margin-top: 30px;
 }
 >>>>>>> origin/main
+=======
+>>>>>>> Stashed changes
